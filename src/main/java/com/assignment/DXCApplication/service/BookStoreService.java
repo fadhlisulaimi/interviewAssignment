@@ -2,6 +2,7 @@ package com.assignment.DXCApplication.service;
 
 import com.assignment.DXCApplication.entity.Author;
 import com.assignment.DXCApplication.entity.Book;
+import com.assignment.DXCApplication.entity.SearchQuery;
 import com.assignment.DXCApplication.exception.ResourceNotFoundException;
 import com.assignment.DXCApplication.repository.AuthorRepository;
 import com.assignment.DXCApplication.repository.BookRepository;
@@ -105,17 +106,19 @@ public class BookStoreService {
     }
 
 
-    public Book returnBook(Book bookToReturn){
+    public Book searchByBook(SearchQuery searchQuery){
 
-        Book existingBook = checkIfBookExists(bookToReturn);
+        Book tmpBook = new Book();
+        tmpBook.setTitle(searchQuery.getTitle());
+        tmpBook.setAuthors(searchQuery.getAuthors().stream().map(authorName -> new Author(authorName, null)).collect(Collectors.toList()));
+
+        Book existingBook = checkIfBookExists(tmpBook);
 
         if(existingBook == null){
-            throw new ResourceNotFoundException("Book", "Title", bookToReturn.getTitle());
+            throw new ResourceNotFoundException("Book", "Title", tmpBook.getTitle());
         }
 
-        existingBook.setStock(existingBook.getStock() + 1);
-
-        return bookRepository.save(existingBook);
+        return existingBook;
     }
 
     public void deleteBook(String isbn){

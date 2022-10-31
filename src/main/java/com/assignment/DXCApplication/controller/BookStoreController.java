@@ -1,6 +1,7 @@
 package com.assignment.DXCApplication.controller;
 
 import com.assignment.DXCApplication.entity.Book;
+import com.assignment.DXCApplication.entity.SearchQuery;
 import com.assignment.DXCApplication.service.BookStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,10 +32,10 @@ public class BookStoreController {
         return new ResponseEntity<Book>(bookStoreService.updateBook(isbn, bookToUpdate), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/return")
+    @PostMapping(value = "/search")
     //@PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Book> returnBook(@RequestBody Book bookToReturn) {
-        return new ResponseEntity<Book>(bookStoreService.returnBook(bookToReturn), HttpStatus.OK);
+    public ResponseEntity<Book> returnBook(@RequestBody SearchQuery searchQuery) {
+        return new ResponseEntity<Book>(bookStoreService.searchByBook(searchQuery), HttpStatus.OK);
     }
 
 
